@@ -134,8 +134,8 @@ class Player:
         if move_recty:
             # move the platforms instead of moving the player if the player is more than halfway
             if self.do['camera']:
-                if self.rect.centery + self.velocity[1] < self.screen_height//2:
-                    diff = self.screen_height//2-(self.rect.centery+self.velocity[1])
+                if self.rect.centery + self.velocity[1] < self.screen_height//2 and self.velocity[1] <= -1:
+                    diff = self.screen_height//2-(self.rect.centery+self.velocity[1])+1
                     self.rect.centery = self.screen_height//2
                     self.platforms.movey(diff)
                     self.jump_on_floor = False
