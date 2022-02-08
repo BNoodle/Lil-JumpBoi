@@ -50,12 +50,10 @@ class Player:
         if (not (key_left and key_right)) and (key_left or key_right):
             if key_left: move_direction = -1
             elif key_right: move_direction = 1
-        else: move_direction = None
+        else: move_direction = 0
 
 
         # movement and collision
-        # get current direction if needed
-        if self.velocity[0] != 0: current_direction = self.velocity[0]/abs(self.velocity[0])
         self.acceleration = [0, 0]
         # get the initial y
         self.stored_y = self.rect.bottom
@@ -63,12 +61,10 @@ class Player:
         if self.do['gravity']:
             self.acceleration[1] = constants.PLAYER_ACCELERATION[1]
         
-        if self.do['move']:
-            if move_direction == None:
-                if self.velocity[0] != 0:
-                    self.acceleration[0] = -current_direction*constants.PLAYER_ACCELERATION[0]
-            else:
-                self.acceleration[0] = constants.PLAYER_ACCELERATION[0]*move_direction
+        if self.do['move']:        
+            target_speed = move_direction*constants.PLAYER_MAX_VELOCITY[0]
+            speed_diff = target_speed-self.velocity[0]
+            self.acceleration[0] = speed_diff*constants.PLAYER_ACCELERATION[0]
 
         # add acceleration to velocity
         self.velocity[0] += self.acceleration[0]
@@ -76,7 +72,7 @@ class Player:
 
         # cap at max velocity and make velocity 0 if its low enough
         if abs(self.velocity[0]) > constants.PLAYER_MAX_VELOCITY[0]:
-            self.velocity[0] = constants.PLAYER_MAX_VELOCITY[0]*current_direction
+            self.velocity[0] = constants.PLAYER_MAX_VELOCITY[0]*(self.velocity[0]/abs(self.velocity[0]))
         if abs(self.velocity[0]) < 0.5:
             self.velocity[0] = 0
         if abs(self.velocity[1]) > constants.PLAYER_MAX_VELOCITY[1]:

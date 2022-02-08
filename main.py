@@ -27,13 +27,14 @@ running = True
 while running:  
     screen.fill(constants.BG_COLOR)
     
-    if my_menu.get_mode() == 'play':
+    menu_mode = my_menu.get_mode()
+    if menu_mode == 'play':
         platforms.update()
         my_player.update()
-    elif my_menu.get_mode() == 'game over':
+    elif menu_mode == 'game over':
         platforms.update()
         my_player.update()
-    elif my_menu.get_mode() == 'restart':
+    elif menu_mode == 'restart':
         platforms = group.PlatformGroup(screen)
         my_player = player.Player(screen, my_menu, platforms, WIDTH//2-(0.5*constants.PLAYER_SIZE), HEIGHT-200)
 
