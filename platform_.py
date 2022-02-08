@@ -17,6 +17,9 @@ class Platform:
             self.groupkill = True
         self.screen.blit(self.image, self.rect)
 
+    def collidefall(self, a, b):
+        return a < self.rect.bottom and b >= a
+
     def colliderect(self, rect):
         return self.rect.colliderect(rect)
 
@@ -46,3 +49,41 @@ class NonePlatform(Platform):
         super().__init__(screen, x, y)
         self.image.set_colorkey(constants.REGULAR_PLATFORM_COLOR)
         self.type = None
+
+
+class DisappearPlatform(Platform):
+
+    def __init__(self, screen, x, y):
+        super().__init__(screen, x, y)
+        self.image.fill(constants.DISAPPEAR_PLATFORM_COLOR)
+        self.image.set_alpha(constants.DISAPPEAR_PLATFORM_ALPHA)
+        self.type = 'disappear'
+        self.do_collision = True
+
+    def collidepoint(self, point):
+        if self.do_collision:
+            return super().collidepoint(point)
+        else: return False
+
+    def colliderect(self, rect):
+        if self.do_collision:
+            return super().colliderect(rect)
+        else: return False
+
+    def collidefall(self, a, b):
+        if self.do_collision:
+            return super().collidefall(a, b)
+        else:
+            return False
+
+    def hit(self):
+        self.do_collision = False
+
+    def update(self):
+        if not self.do_collision:
+            alpha = self.image.get_alpha()-constants.DISAPPEAR_PLATFORM_ALPHA_DECREASE
+            if alpha >= 0:
+                self.image.set_alpha(alpha)
+            else:
+                self.groupkill = True
+        return super().update()

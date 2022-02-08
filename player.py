@@ -95,7 +95,7 @@ class Player:
         # platform collision
         if self.velocity[1] > 0:
             collision, platform = self.platforms.colliderect(test_recty)
-            if collision and (self.stored_y < platform.rect.bottom and test_recty.bottom >= self.stored_y):
+            if collision and (platform.collidefall(self.stored_y, self.rect.bottom)):
                 if platform.type == 'regular':
                     if self.do['jump']:
                         self.velocity[1] = constants.PLAYER_JUMP_VELOCITY
@@ -113,6 +113,13 @@ class Player:
                         self.die()
                         self.velocity[0] = 0
                         self.velocity[1] = constants.DEATH_PLATFORM_VELOCITY
+                elif platform.type == 'disappear':
+                    if self.do['jump']:
+                        self.velocity[1] = constants.PLAYER_JUMP_VELOCITY
+                        move_recty = False
+                        if self.stored_y < platform.rect.top:
+                            self.rect.bottom = platform.rect.top
+                        platform.hit()
         # bottom screen collision
         if test_recty.bottom > self.screen_height:
             if self.jump_on_floor:

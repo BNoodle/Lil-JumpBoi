@@ -47,6 +47,7 @@ class PlatformGroup(SpriteGroup):
         self.safe_counter = 0
         self.jump_boost_chance = constants.JUMP_BOOST_PLATFORM_START_CHANCE
         self.death_chance = constants.DEATH_PLATFORM_START_CHANCE
+        self.disappear_chance = constants.DISAPPEAR_PLATFORM_START_CHANCE
         self.no_platform_chance = constants.NO_PLATFORM_START_CHANCE
         self.score_counter = 0
         self.score_store = self.menu.score
@@ -69,6 +70,8 @@ class PlatformGroup(SpriteGroup):
             self.group.append(platform_.JumpBoostPlatform(self.screen, x, y))
         elif platform_type == 'death':
             self.group.append(platform_.DeathPlatform(self.screen, x, y))
+        elif platform_type == 'disappear':
+            self.group.append(platform_.DisappearPlatform(self.screen, x, y))
         elif platform_type == None:
             self.group.append(platform_.NonePlatform(self.screen, x, y))
 
@@ -78,6 +81,8 @@ class PlatformGroup(SpriteGroup):
             self.safe_counter = 0
             if n <= self.jump_boost_chance:
                 return 'jump boost'
+            elif n <= self.jump_boost_chance+self.disappear_chance:
+                return 'disappear'
             else:
                 return 'regular'
         # regular spawning
@@ -88,6 +93,8 @@ class PlatformGroup(SpriteGroup):
                 return 'death'
             elif n <= self.jump_boost_chance+self.death_chance+self.no_platform_chance:
                 return None
+            elif n <= self.jump_boost_chance+self.death_chance+self.no_platform_chance+self.disappear_chance:
+                return 'disappear'
             else:
                 return 'regular'
 
@@ -95,6 +102,12 @@ class PlatformGroup(SpriteGroup):
         self.jump_boost_chance += constants.JUMP_BOOST_PLATFORM_CHANCE_INCREASE
         self.death_chance += constants.DEATH_PLATFORM_CHANCE_INCREASE
         self.no_platform_chance += constants.NO_PLATFORM_CHANCE_INCREASE
+        self.disappear_chance += constants.DISAPPEAR_PLATFORM_CHANCE_INCREASE
+        if self.jump_boost_chance+self.death_chance+self.no_platform_chance > 100:
+            self.jump_boost_chance -= constants.JUMP_BOOST_PLATFORM_CHANCE_INCREASE
+            self.death_chance -= constants.DEATH_PLATFORM_CHANCE_INCREASE
+            self.no_platform_chance -= constants.NO_PLATFORM_CHANCE_INCREASE
+            self.disappear_chance -= constants.DISAPPEAR_PLATFORM_CHANCE_INCREASE
 
     def update(self):
         super().update()
