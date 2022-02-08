@@ -20,7 +20,7 @@ default_data = {
 save_file = save_managing.SaveFile(os.path.join(os.path.dirname(__file__), 'save'), default_data)
 
 my_menu = menu.Menu(screen, save_file)
-platforms = group.PlatformGroup(screen)
+platforms = group.PlatformGroup(screen, my_menu)
 my_player = player.Player(screen, my_menu, platforms, WIDTH//2-(0.5*constants.PLAYER_SIZE), HEIGHT-200)
 
 running = True
@@ -35,7 +35,7 @@ while running:
         platforms.update()
         my_player.update()
     elif menu_mode == 'restart':
-        platforms = group.PlatformGroup(screen)
+        platforms = group.PlatformGroup(screen, my_menu)
         my_player = player.Player(screen, my_menu, platforms, WIDTH//2-(0.5*constants.PLAYER_SIZE), HEIGHT-200)
 
     my_menu.update()

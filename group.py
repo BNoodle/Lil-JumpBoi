@@ -38,12 +38,18 @@ class SpriteGroup:
 
 class PlatformGroup(SpriteGroup):
     
-    def __init__(self, screen):
+    def __init__(self, screen, menu):
         super().__init__()
         my_platform = platform_.Platform(screen, self.random_x(), constants.SCREEN_SIZE[1]-constants.PLATFORM_SPAWN_DISTANCE)
         self.group.append(my_platform)
         self.screen = screen
+        self.menu = menu
         self.safe_counter = 0
+        self.jump_boost_chance = constants.JUMP_BOOST_PLATFORM_START_CHANCE
+        self.death_chance = constants.DEATH_PLATFORM_START_CHANCE
+        self.no_platform_chance = constants.NO_PLATFORM_START_CHANCE
+        self.score_counter = 0
+        self.score_store = self.menu.score
         self.update()
 
     def movey(self, distance):
@@ -70,20 +76,25 @@ class PlatformGroup(SpriteGroup):
         # safe spawning
         if self.safe_counter == 3:
             self.safe_counter = 0
-            if n <= 5:
+            if n <= self.jump_boost_chance:
                 return 'jump boost'
             else:
                 return 'regular'
         # regular spawning
         else:
-            if n <= 5:
+            if n <= self.jump_boost_chance:
                 return 'jump boost'
-            elif n <= 10:
+            elif n <= self.jump_boost_chance+self.death_chance:
                 return 'death'
-            elif n <= 15:
+            elif n <= self.jump_boost_chance+self.death_chance+self.no_platform_chance:
                 return None
             else:
                 return 'regular'
+
+    def add_chance(self):
+        self.jump_boost_chance += constants.JUMP_BOOST_PLATFORM_CHANCE_INCREASE
+        self.death_chance += constants.DEATH_PLATFORM_CHANCE_INCREASE
+        self.no_platform_chance += constants.NO_PLATFORM_CHANCE_INCREASE
 
     def update(self):
         super().update()
@@ -93,4 +104,8 @@ class PlatformGroup(SpriteGroup):
                 max = platform.rect.top
         for i in range(1, ceil((max+constants.PLATFORM_SIZE[1])/constants.PLATFORM_SPAWN_DISTANCE)):
             self.spawn(self.random_x(), max-(i*constants.PLATFORM_SPAWN_DISTANCE))
-        
+        self.score_counter += self.menu.score-self.score_store
+        self.score_store = self.menu.score
+        if self.score_counter > constants.SCORE_CHANCE_INCREASE:
+            self.score_counter -= constants.SCORE_CHANCE_INCREASE
+            self.add_chance()
