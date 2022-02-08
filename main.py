@@ -19,7 +19,7 @@ default_data = {
 }
 save_file = save_managing.SaveFile(os.path.join(os.path.dirname(__file__), 'save'), default_data)
 
-my_menu = menu.Menu(screen)
+my_menu = menu.Menu(screen, save_file)
 platforms = group.PlatformGroup(screen)
 my_player = player.Player(screen, my_menu, platforms, WIDTH//2-(0.5*constants.PLAYER_SIZE), HEIGHT-200)
 
@@ -42,5 +42,6 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+            save_file.save()
     pygame.display.flip()
     clock.tick(FPS)
