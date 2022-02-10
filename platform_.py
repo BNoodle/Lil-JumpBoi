@@ -5,8 +5,10 @@ class Platform:
 
     def __init__(self, screen, x, y):
         self.screen = screen
-        self.image = pygame.Surface(constants.PLATFORM_SIZE).convert()
-        self.image.fill(constants.REGULAR_PLATFORM_COLOR)
+        #self.image = pygame.Surface(constants.PLATFORM_SIZE).convert()
+        #self.image.fill(constants.REGULAR_PLATFORM_COLOR)
+        self.image = pygame.image.load('Images/regular_platform.png', ).convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE))
         self.rect = self.image.get_rect()
         self.rect.topleft = x, y
         self.groupkill = False
@@ -47,7 +49,8 @@ class NonePlatform(Platform):
 
     def __init__(self, screen, x, y):
         super().__init__(screen, x, y)
-        self.image.set_colorkey(constants.REGULAR_PLATFORM_COLOR)
+        self.image.set_colorkey((255, 255, 255))
+        self.image.fill((255, 255, 255))
         self.type = None
 
 

@@ -1,5 +1,5 @@
 import pygame
-import os
+from os import path
 import constants
 import player
 import group
@@ -17,7 +17,7 @@ clock = pygame.time.Clock()
 default_data = {
     'highscore': 0
 }
-save_file = save_managing.SaveFile(os.path.join(os.path.dirname(__file__), 'save'), default_data)
+save_file = save_managing.SaveFile(path.join(path.dirname(__file__), 'save'), default_data)
 
 my_menu = menu.Menu(screen, save_file)
 platforms = group.PlatformGroup(screen, my_menu)
