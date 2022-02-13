@@ -42,7 +42,9 @@ class DeathPlatform(Platform):
     
     def __init__(self, screen, x, y):
         super().__init__(screen, x, y)
-        self.image.fill(constants.DEATH_PLATFORM_COLOR)
+        self.image = pygame.image.load('Images/death_platform.png')
+        self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE))
+        self.rect = pygame.Rect((x, y-constants.DEATH_PLATFORM_SPIKE_HEIGHT), (self.image.get_width(), constants.DEATH_PLATFORM_SPIKE_HEIGHT))
         self.type = 'death'
 
 

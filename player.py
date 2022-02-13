@@ -1,5 +1,6 @@
 import pygame
 import constants
+import random
 
 class Player:
 
@@ -39,6 +40,9 @@ class Player:
         self.menu.game_over()
         self.do['jump'] = False
         self.do['move'] = False
+        self.do['die'] = False
+        self.do['wraparound'] = False
+        self.do['camera'] = False
 
     def update(self):
 
@@ -111,7 +115,7 @@ class Player:
                 elif platform.type == 'death':
                     if self.do['die']:
                         self.die()
-                        self.velocity[0] = 0
+                        self.velocity[0] = random.randint(-10, 10)
                         self.velocity[1] = constants.DEATH_PLATFORM_VELOCITY
                 elif platform.type == 'disappear':
                     if self.do['jump']:
@@ -131,10 +135,11 @@ class Player:
                 if self.do['die']:
                     self.die()
         # side screen collision
-        if test_rectx.right < 0:
-            self.rect.left = self.screen_width
-        elif test_rectx.left > self.screen_width:
-            self.rect.right = 0
+        if self.do['wraparound']:
+            if test_rectx.right < 0:
+                self.rect.left = self.screen_width
+            elif test_rectx.left > self.screen_width:
+                self.rect.right = 0
         # move rectangle if indicated
         if move_rectx:
             self.rect.x += self.velocity[0]
