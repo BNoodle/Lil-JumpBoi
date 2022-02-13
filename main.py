@@ -21,14 +21,16 @@ save_file = save_managing.SaveFile(path.join(path.dirname(__file__), 'save'), de
 
 my_menu = menu.Menu(screen, save_file)
 platforms = group.PlatformGroup(screen, my_menu)
-my_player = player.Player(screen, my_menu, platforms, WIDTH//2-(0.5*constants.PLAYER_SIZE), HEIGHT-200)
 
 running = True
 while running:  
     screen.fill(constants.BG_COLOR)
     
     menu_mode = my_menu.get_mode()
-    if menu_mode == 'play':
+    if menu_mode == 'title':
+        platforms.update()
+        platforms.movey(1)
+    elif menu_mode == 'play':
         platforms.update()
         my_player.update()
     elif menu_mode == 'game over':
@@ -41,6 +43,9 @@ while running:
     my_menu.update()
 
     for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if my_menu.get_mode() == 'title':
+                my_menu.exit_title()
         if event.type == pygame.QUIT:
             running = False
             save_file.save()
