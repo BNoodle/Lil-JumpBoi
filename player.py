@@ -9,8 +9,13 @@ class Player:
         self.menu = menu
         self.platforms = platforms
 
-        self.image = pygame.Surface((constants.PLAYER_SIZE[0], constants.PLAYER_SIZE[1])).convert()
-        self.image.fill(constants.PLAYER_COLOR)
+        self.image_jump = pygame.image.load('Images/player_jump.png')
+        self.image_jump = pygame.transform.smoothscale(self.image_jump, (self.image_jump.get_width()*constants.PLAYER_SCALE, self.image_jump.get_height()*constants.PLAYER_SCALE)).convert_alpha()
+        self.image_stand = pygame.image.load('Images/player_stand.png')
+        self.image_stand = pygame.transform.smoothscale(self.image_stand, (self.image_stand.get_width()*constants.PLAYER_SCALE, self.image_stand.get_height()*constants.PLAYER_SCALE)).convert_alpha()
+        self.image_death = pygame.image.load('Images/player_death.png')
+        self.image_death = pygame.transform.smoothscale(self.image_death, (self.image_death.get_width()*constants.PLAYER_SCALE, self.image_death.get_height()*constants.PLAYER_SCALE)).convert_alpha()
+        self.image = self.image_jump
 
         self.rect = self.image.get_rect()
         self.rect.topleft = x, y
@@ -32,17 +37,26 @@ class Player:
             'jump': True,
             'camera': True,
             'wraparound': True,
-            'die': True
+            'die': True,
+            'animate': True
         }
         
     def die(self):
         self.dead = True
+        self.image = self.image_death
+        self.update_rect()
         self.menu.game_over()
         self.do['jump'] = False
         self.do['move'] = False
         self.do['die'] = False
         self.do['wraparound'] = False
         self.do['camera'] = False
+        self.do['animate'] = False
+
+    def update_rect(self):
+        coord = self.rect.midbottom
+        self.rect = self.image.get_rect()
+        self.rect.midbottom = coord
 
     def update(self):
 
@@ -156,6 +170,14 @@ class Player:
                     self.rect.y += self.velocity[1]
             else:
                 self.rect.y += self.velocity[1]
+        
+        # animations
+        if self.do['animate']:
+            if self.velocity[1] >= -1:
+                self.image = self.image_jump
+            elif self.velocity[1] < -1:
+                self.image = self.image_stand
+            self.update_rect()
 
 
         self.screen.blit(self.image, self.rect)

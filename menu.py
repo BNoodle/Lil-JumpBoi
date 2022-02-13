@@ -21,12 +21,12 @@ class Menu:
         self.fade_amount = constants.MAX_FADE_AMOUNT
         self.fade_cover.set_alpha(self.fade_amount)
         
-        self.game_over_image = pygame.image.load('Images/game_over.png').convert_alpha()
-        self.game_over_image = pygame.transform.smoothscale(self.game_over_image, (self.game_over_image.get_width()*constants.GAME_OVER_SCALE, self.game_over_image.get_height()*constants.GAME_OVER_SCALE))
+        self.game_over_image = pygame.image.load('Images/game_over.png')
+        self.game_over_image = pygame.transform.smoothscale(self.game_over_image, (self.game_over_image.get_width()*constants.GAME_OVER_SCALE, self.game_over_image.get_height()*constants.GAME_OVER_SCALE)).convert_alpha()
         self.game_over_pos = (0, 0)
 
-        self.title_image = pygame.image.load('Images/title.png').convert_alpha()
-        self.title_image = pygame.transform.smoothscale(self.title_image, (self.title_image.get_width()*constants.TITLE_SCALE, self.title_image.get_height()*constants.TITLE_SCALE))
+        self.title_image = pygame.image.load('Images/title.png')
+        self.title_image = pygame.transform.smoothscale(self.title_image, (self.title_image.get_width()*constants.TITLE_SCALE, self.title_image.get_height()*constants.TITLE_SCALE)).convert_alpha()
         self.title_pos = (0, 0)
 
     def game_over(self):
@@ -69,6 +69,7 @@ class Menu:
             self.fade_out()
             self.show_title()
         elif self.mode == 'play':
+            print(self.fade_amount)
             self.fade_in()
             if self.score > self.highscore: self.highscore = int(self.score)
             self.show_score()

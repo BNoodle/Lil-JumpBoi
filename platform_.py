@@ -5,8 +5,8 @@ class Platform:
 
     def __init__(self, screen, x, y):
         self.screen = screen
-        self.image = pygame.image.load('Images/regular_platform.png', ).convert_alpha()
-        self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE))
+        self.image = pygame.image.load('Images/regular_platform.png', )
+        self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.topleft = x, y
         self.groupkill = False
@@ -31,8 +31,8 @@ class JumpBoostPlatform(Platform):
     
     def __init__(self, screen, x, y):
         super().__init__(screen, x, y)
-        self.image = pygame.image.load('Images/jump_boost_platform.png', ).convert_alpha()
-        self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE))
+        self.image = pygame.image.load('Images/jump_boost_platform.png', )
+        self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.topleft = x, y
         self.type = 'jump boost'
@@ -43,7 +43,7 @@ class DeathPlatform(Platform):
     def __init__(self, screen, x, y):
         super().__init__(screen, x, y)
         self.image = pygame.image.load('Images/death_platform.png')
-        self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE))
+        self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
         self.rect = pygame.Rect((x, y-constants.DEATH_PLATFORM_SPIKE_HEIGHT), (self.image.get_width(), constants.DEATH_PLATFORM_SPIKE_HEIGHT))
         self.type = 'death'
 
