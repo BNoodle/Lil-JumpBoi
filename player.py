@@ -122,17 +122,20 @@ class Player:
                         move_recty = False
                         if self.stored_y < platform.rect.top:
                             self.rect.bottom = platform.rect.top
+                        platform.hit()
                 elif platform.type == 'jump boost':
                     if self.do['jump']:
                         self.velocity[1] = constants.JUMP_BOOST_VELOCITY
                         move_recty = False
                         if self.stored_y < platform.rect.top:
                             self.rect.bottom = platform.rect.top
+                        platform.hit()
                 elif platform.type == 'death':
                     if self.do['die']:
                         self.die()
                         self.velocity[0] = random.randint(-10, 10)
                         self.velocity[1] = constants.DEATH_PLATFORM_VELOCITY
+                        platform.hit()
                 elif platform.type == 'disappear':
                     if self.do['jump']:
                         self.velocity[1] = constants.PLAYER_JUMP_VELOCITY
