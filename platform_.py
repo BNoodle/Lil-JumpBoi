@@ -5,8 +5,6 @@ class Platform:
 
     def __init__(self, screen, x, y):
         self.screen = screen
-        #self.image = pygame.Surface(constants.PLATFORM_SIZE).convert()
-        #self.image.fill(constants.REGULAR_PLATFORM_COLOR)
         self.image = pygame.image.load('Images/regular_platform.png', ).convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE))
         self.rect = self.image.get_rect()
@@ -33,7 +31,10 @@ class JumpBoostPlatform(Platform):
     
     def __init__(self, screen, x, y):
         super().__init__(screen, x, y)
-        self.image.fill(constants.JUMP_BOOST_PLATFORM_COLOR)
+        self.image = pygame.image.load('Images/jump_boost_platform.png', ).convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE))
+        self.rect = self.image.get_rect()
+        self.rect.topleft = x, y
         self.type = 'jump boost'
 
 
