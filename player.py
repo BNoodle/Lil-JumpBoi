@@ -30,6 +30,8 @@ class Player:
         self.jump_on_floor = True
         self.dead = False
 
+        self.flip = False
+
         # things the player is allowed to do
         self.do = {
             'gravity': True,
@@ -177,6 +179,11 @@ class Player:
                 self.image = self.image_jump
             elif self.velocity[1] < -1:
                 self.image = self.image_stand
+            if self.velocity[0] > 0:
+                self.flip = True
+            elif self.velocity[0] < 0:
+                self.flip = False
+            self.image = pygame.transform.flip(self.image, self.flip, False)
             self.update_rect()
 
 

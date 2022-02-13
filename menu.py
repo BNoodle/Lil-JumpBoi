@@ -69,7 +69,6 @@ class Menu:
             self.fade_out()
             self.show_title()
         elif self.mode == 'play':
-            print(self.fade_amount)
             self.fade_in()
             if self.score > self.highscore: self.highscore = int(self.score)
             self.show_score()
