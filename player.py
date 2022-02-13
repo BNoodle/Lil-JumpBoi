@@ -8,7 +8,7 @@ class Player:
         self.menu = menu
         self.platforms = platforms
 
-        self.image = pygame.Surface((constants.PLAYER_SIZE, constants.PLAYER_SIZE)).convert()
+        self.image = pygame.Surface((constants.PLAYER_SIZE[0], constants.PLAYER_SIZE[1])).convert()
         self.image.fill(constants.PLAYER_COLOR)
 
         self.rect = self.image.get_rect()

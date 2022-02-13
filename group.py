@@ -40,7 +40,7 @@ class PlatformGroup(SpriteGroup):
     
     def __init__(self, screen, menu):
         super().__init__()
-        my_platform = platform_.Platform(screen, self.random_x(), constants.SCREEN_SIZE[1]-constants.PLATFORM_SPAWN_DISTANCE)
+        my_platform = platform_.Platform(screen, self.random_x(under_player=False), constants.SCREEN_SIZE[1]-constants.PLATFORM_SPAWN_DISTANCE)
         self.group.append(my_platform)
         self.screen = screen
         self.menu = menu
@@ -57,8 +57,14 @@ class PlatformGroup(SpriteGroup):
         for platform in self.group:
             platform.rect.y += distance
 
-    def random_x(self):
-        return random.randint(0, constants.SCREEN_SIZE[0]-constants.PLATFORM_SIZE[0])
+    def random_x(self, under_player=True):
+        num = random.randint(0, constants.SCREEN_SIZE[0]-constants.PLATFORM_SIZE[0])
+        if not under_player:
+            start = (constants.SCREEN_SIZE[0]//2)-(constants.PLAYER_SIZE[0]//2)-(constants.PLATFORM_SIZE[0])
+            end = (constants.SCREEN_SIZE[0]//2)+(constants.PLAYER_SIZE[0]//2)
+            while num >= start and num <= end:
+                num = random.randint(0, constants.SCREEN_SIZE[0]-constants.PLATFORM_SIZE[0])
+        return num
 
     def spawn(self, x, y):
         self.safe_counter += 1
@@ -116,7 +122,11 @@ class PlatformGroup(SpriteGroup):
             if platform.rect.top < max:
                 max = platform.rect.top
         for i in range(1, ceil((max+constants.PLATFORM_SIZE[1])/constants.PLATFORM_SPAWN_DISTANCE)):
-            self.spawn(self.random_x(), max-(i*constants.PLATFORM_SPAWN_DISTANCE))
+            if max-(i*constants.PLATFORM_SPAWN_DISTANCE) > constants.SCREEN_SIZE[1]*0.75:
+                x = self.random_x(under_player=False)
+            else:
+                x = self.random_x()
+            self.spawn(x, max-(i*constants.PLATFORM_SPAWN_DISTANCE))
         self.score_counter += self.menu.score-self.score_store
         self.score_store = self.menu.score
         if self.score_counter > constants.SCORE_CHANCE_INCREASE:

@@ -23,23 +23,11 @@ class Menu:
         
         self.game_over_image = pygame.image.load('Images/game_over.png').convert_alpha()
         self.game_over_image = pygame.transform.smoothscale(self.game_over_image, (self.game_over_image.get_width()*constants.GAME_OVER_SCALE, self.game_over_image.get_height()*constants.GAME_OVER_SCALE))
-        self.game_over_pos = ((constants.SCREEN_SIZE[0]//2)-(self.game_over_image.get_width()//2), (constants.SCREEN_SIZE[1]//2)-(self.game_over_image.get_height()//2))
-
-        self.restart_font = pygame.font.Font(None, constants.RESTART_SIZE)
-        self.restart_text = self.restart_font.render(constants.RESTART_TEXT, True, constants.RESTART_COLOR)
-        self.restart_pos = ((self.screen_width//2)-(self.restart_text.get_width()//2), (self.screen_height-self.restart_text.get_height()-10))
+        self.game_over_pos = (0, 0)
 
         self.title_image = pygame.image.load('Images/title.png').convert_alpha()
         self.title_image = pygame.transform.smoothscale(self.title_image, (self.title_image.get_width()*constants.TITLE_SCALE, self.title_image.get_height()*constants.TITLE_SCALE))
-        self.title_pos = ((self.screen_width//2)-(self.title_image.get_width()//2), (self.screen_height//2-self.title_image.get_height()//2))
-
-        self.credits_font = pygame.font.Font(None, constants.CREDITS_SIZE)
-        self.credits_text = self.credits_font.render(constants.CREDITS_TEXT, True, constants.CREDITS_COLOR)
-        self.credits_pos = ((self.screen_width//2)-(self.credits_text.get_width()//2), self.title_pos[1]+self.title_image.get_height()+10)
-
-        self.start_font = pygame.font.Font(None, constants.START_SIZE)
-        self.start_text = self.start_font.render(constants.START_TEXT, True, constants.START_COLOR)
-        self.start_pos = ((self.screen_width//2)-(self.start_text.get_width()//2), (self.screen_height-self.start_text.get_height()-10))
+        self.title_pos = (0, 0)
 
     def game_over(self):
         self.mode = 'game over'
@@ -51,9 +39,7 @@ class Menu:
         return self.mode
 
     def show_title(self):
-        self.screen.blit(self.start_text, self.start_pos)
         self.screen.blit(self.title_image, self.title_pos)
-        self.screen.blit(self.credits_text, self.credits_pos)
 
     def show_score(self):
         score_text = self.score_font.render(f'Score: {int(self.score)}', True, constants.SCORE_COLOR)
@@ -65,7 +51,6 @@ class Menu:
 
     def show_game_over(self):
         self.screen.blit(self.game_over_image, self.game_over_pos)
-        self.screen.blit(self.restart_text, self.restart_pos)
 
     def fade_out(self):
         if not self.fade_amount >= constants.MAX_FADE_AMOUNT:
