@@ -87,4 +87,3 @@ class Menu:
         elif self.mode == 'restart':
             self.score = 0
             self.mode = 'play'
-        print(self.score)
