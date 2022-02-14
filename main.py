@@ -54,6 +54,9 @@ while running:
         if event.type == pygame.KEYDOWN:
             if my_menu.get_mode() == 'title':
                 my_menu.exit_title()
+            elif my_menu.get_mode() == 'game over':
+                if event.key == pygame.K_SPACE:
+                    my_menu.restart()
         if event.type == pygame.QUIT:
             running = False
             save_file.save()

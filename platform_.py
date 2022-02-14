@@ -40,8 +40,6 @@ class Platform:
         rect_to_display.x += self.display_diff[0]
         rect_to_display.y += self.display_diff[1]
         self.screen.blit(self.image, rect_to_display)
-        if pygame.key.get_pressed()[pygame.K_SPACE]:
-            pygame.draw.rect(self.screen, (255, 0, 0), self.rect)
 
     def collidefall(self, a, b):
         return a < self.rect.bottom and b >= a

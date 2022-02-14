@@ -35,6 +35,9 @@ class Menu:
     def game_over(self):
         self.mode = 'game over'
 
+    def restart(self):
+        self.mode = 'restart'
+
     def exit_title(self):
         self.mode = 'restart'
 
@@ -82,8 +85,6 @@ class Menu:
             self.show_highscore()
             self.show_game_over()
             self.save_file.data['highscore'] = self.highscore
-            if pygame.key.get_pressed()[pygame.K_SPACE]:
-                self.mode = 'restart'
         elif self.mode == 'restart':
             self.score = 0
             self.mode = 'play'
