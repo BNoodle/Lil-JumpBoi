@@ -133,7 +133,7 @@ class Player:
                 elif platform.type == 'death':
                     if self.do['die']:
                         self.die()
-                        self.velocity[0] = random.randint(-10, 10)
+                        self.velocity[0] = self.velocity[0]//2*-1
                         self.velocity[1] = constants.DEATH_PLATFORM_VELOCITY
                         platform.hit()
                 elif platform.type == 'disappear':
@@ -143,6 +143,14 @@ class Player:
                         if self.stored_y < platform.rect.top:
                             self.rect.bottom = platform.rect.top
                         platform.hit()
+                elif platform.type == 'moving':
+                    if self.do['jump']:
+                        self.velocity[1] = constants.PLAYER_JUMP_VELOCITY
+                        move_recty = False
+                        if self.stored_y < platform.rect.top:
+                            self.rect.bottom = platform.rect.top
+                        platform.hit()
+                        
         # bottom screen collision
         if test_recty.bottom > self.screen_height:
             if self.jump_on_floor:

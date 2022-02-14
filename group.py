@@ -49,6 +49,7 @@ class PlatformGroup(SpriteGroup):
         self.death_chance = constants.DEATH_PLATFORM_START_CHANCE
         self.disappear_chance = constants.DISAPPEAR_PLATFORM_START_CHANCE
         self.no_platform_chance = constants.NO_PLATFORM_START_CHANCE
+        self.moving_chance = constants.MOVING_PLATFORM_START_CHANCE
         self.score_counter = 0
         self.score_store = self.menu.score
         self.update()
@@ -78,6 +79,8 @@ class PlatformGroup(SpriteGroup):
             self.group.append(platform_.DeathPlatform(self.screen, x, y))
         elif platform_type == 'disappear':
             self.group.append(platform_.DisappearPlatform(self.screen, x, y))
+        elif platform_type == 'moving':
+            self.group.append(platform_.MovingPlatform(self.screen, x, y))
         elif platform_type == None:
             self.group.append(platform_.NonePlatform(self.screen, x, y))
 
@@ -89,6 +92,8 @@ class PlatformGroup(SpriteGroup):
                 return 'jump boost'
             elif n <= self.jump_boost_chance+self.disappear_chance:
                 return 'disappear'
+            elif n <= self.jump_boost_chance+self.disappear_chance+self.moving_chance:
+                return 'moving'
             else:
                 return 'regular'
         # regular spawning
@@ -101,6 +106,8 @@ class PlatformGroup(SpriteGroup):
                 return None
             elif n <= self.jump_boost_chance+self.death_chance+self.no_platform_chance+self.disappear_chance:
                 return 'disappear'
+            elif n <= self.jump_boost_chance+self.death_chance+self.no_platform_chance+self.disappear_chance+self.moving_chance:
+                return 'moving'
             else:
                 return 'regular'
 
@@ -109,11 +116,13 @@ class PlatformGroup(SpriteGroup):
         self.death_chance += constants.DEATH_PLATFORM_CHANCE_INCREASE
         self.no_platform_chance += constants.NO_PLATFORM_CHANCE_INCREASE
         self.disappear_chance += constants.DISAPPEAR_PLATFORM_CHANCE_INCREASE
+        self.moving_chance += constants.MOVING_PLATFORM_CHANCE_INCREASE
         if self.jump_boost_chance+self.death_chance+self.no_platform_chance > 100:
             self.jump_boost_chance -= constants.JUMP_BOOST_PLATFORM_CHANCE_INCREASE
             self.death_chance -= constants.DEATH_PLATFORM_CHANCE_INCREASE
             self.no_platform_chance -= constants.NO_PLATFORM_CHANCE_INCREASE
             self.disappear_chance -= constants.DISAPPEAR_PLATFORM_CHANCE_INCREASE
+            self.moving_chance -= constants.MOVING_PLATFORM_CHANCE_INCREASE
 
     def update(self):
         super().update()
@@ -121,7 +130,7 @@ class PlatformGroup(SpriteGroup):
         for platform in self.group:
             if platform.rect.top < max:
                 max = platform.rect.top
-        for i in range(1, ceil((max+constants.PLATFORM_SIZE[1])/constants.PLATFORM_SPAWN_DISTANCE)):
+        for i in range(1, ceil((max+1000)/constants.PLATFORM_SPAWN_DISTANCE)):
             if max-(i*constants.PLATFORM_SPAWN_DISTANCE) > constants.SCREEN_SIZE[1]*0.75:
                 x = self.random_x(under_player=False)
             else:

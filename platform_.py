@@ -40,6 +40,8 @@ class Platform:
         rect_to_display.x += self.display_diff[0]
         rect_to_display.y += self.display_diff[1]
         self.screen.blit(self.image, rect_to_display)
+        if pygame.key.get_pressed()[pygame.K_SPACE]:
+            pygame.draw.rect(self.screen, (255, 0, 0), self.rect)
 
     def collidefall(self, a, b):
         return a < self.rect.bottom and b >= a
@@ -140,3 +142,48 @@ class DisappearPlatform(Platform):
         rect_to_display.x += self.display_diff[0]
         rect_to_display.y += self.display_diff[1]
         self.screen.blit(self.image, rect_to_display)
+
+
+class MovingPlatform(Platform):
+
+    def __init__(self, screen, x, y):
+        super().__init__(screen, x, y)
+        self.image1 = pygame.image.load('Images/moving_platform1.png')
+        self.image1 = pygame.transform.smoothscale(self.image1, (self.image1.get_width()*constants.PLATFORM_SCALE, self.image1.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
+        self.image2 = pygame.image.load('Images/moving_platform2.png')
+        self.image2 = pygame.transform.smoothscale(self.image2, (self.image2.get_width()*constants.PLATFORM_SCALE, self.image2.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
+        self.image3 = pygame.image.load('Images/moving_platform3.png')
+        self.image3 = pygame.transform.smoothscale(self.image3, (self.image3.get_width()*constants.PLATFORM_SCALE, self.image3.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
+        self.image4 = pygame.image.load('Images/moving_platform4.png')
+        self.image4 = pygame.transform.smoothscale(self.image4, (self.image4.get_width()*constants.PLATFORM_SCALE, self.image4.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
+        self.image5 = pygame.image.load('Images/moving_platform5.png')
+        self.image5 = pygame.transform.smoothscale(self.image5, (self.image5.get_width()*constants.PLATFORM_SCALE, self.image5.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
+        self.image6 = pygame.image.load('Images/moving_platform6.png')
+        self.image6 = pygame.transform.smoothscale(self.image6, (self.image6.get_width()*constants.PLATFORM_SCALE, self.image6.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
+
+        self.image_list = [self.image1, self.image2, self.image3, self.image4, self.image5, self.image6, self.image5, self.image4, self.image3, self.image2]
+        self.animation_length = len(self.image_list)-1
+        self.current_image = 0
+        self.image = self.image_list[self.current_image]
+
+        self.animation_timer = 0
+
+        self.rect = pygame.Rect((x, y), (self.image.get_width(), self.image.get_height()-constants.MOVING_PLATFORM_JET_HEIGHT))
+        self.current_direction = constants.MOVING_PLATFORM_SPEED
+        self.type = 'moving'
+
+    def update(self):
+        self.rect.x += self.current_direction
+        if self.rect.right > constants.SCREEN_SIZE[0] or self.rect.left < 0:
+            self.current_direction *= -1
+            self.rect.x += self.current_direction*2
+
+        self.animation_timer += 1
+        if self.animation_timer >= constants.MOVING_PLATFORM_ANIMATION_SPEED:
+            self.animation_timer = 0
+            self.current_image += 1
+            if self.current_image > self.animation_length:
+                self.current_image = 0
+            self.image = self.image_list[self.current_image]
+
+        super().update()
