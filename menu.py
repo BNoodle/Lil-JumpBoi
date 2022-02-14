@@ -29,6 +29,9 @@ class Menu:
         self.title_image = pygame.transform.smoothscale(self.title_image, (self.title_image.get_width()*constants.TITLE_SCALE, self.title_image.get_height()*constants.TITLE_SCALE)).convert_alpha()
         self.title_pos = (0, 0)
 
+    def add_score(self, num):
+        self.score += num
+
     def game_over(self):
         self.mode = 'game over'
 
@@ -84,3 +87,4 @@ class Menu:
         elif self.mode == 'restart':
             self.score = 0
             self.mode = 'play'
+        print(self.score)

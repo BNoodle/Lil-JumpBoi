@@ -26,7 +26,7 @@ class Player:
         self.screen_width = screen.get_width()
         self.screen_height = screen.get_height()
 
-        self.stored_y = self.rect.bottom
+        self.stored_bottom = self.rect.bottom
         self.jump_on_floor = True
         self.dead = False
 
@@ -76,7 +76,7 @@ class Player:
         # movement and collision
         self.acceleration = [0, 0]
         # get the initial y
-        self.stored_y = self.rect.bottom
+        self.stored_bottom = self.rect.bottom
 
         if self.do['gravity']:
             self.acceleration[1] = constants.PLAYER_ACCELERATION[1]
@@ -115,39 +115,39 @@ class Player:
         # platform collision
         if self.velocity[1] > 0:
             collision, platform = self.platforms.colliderect(test_recty)
-            if collision and (platform.collidefall(self.stored_y, self.rect.bottom)):
-                if platform.type == 'regular':
+            if collision:
+                if platform.type == 'regular' and (platform.collidefall(self.stored_bottom, self.rect.bottom)):
                     if self.do['jump']:
                         self.velocity[1] = constants.PLAYER_JUMP_VELOCITY
                         move_recty = False
-                        if self.stored_y < platform.rect.top:
+                        if self.stored_bottom < platform.rect.top:
                             self.rect.bottom = platform.rect.top
                         platform.hit()
-                elif platform.type == 'jump boost':
+                elif platform.type == 'jump boost' and (platform.collidefall(self.stored_bottom, self.rect.bottom)):
                     if self.do['jump']:
                         self.velocity[1] = constants.JUMP_BOOST_VELOCITY
                         move_recty = False
-                        if self.stored_y < platform.rect.top:
+                        if self.stored_bottom < platform.rect.top:
                             self.rect.bottom = platform.rect.top
                         platform.hit()
-                elif platform.type == 'death':
+                elif platform.type == 'death' and (platform.collidefall(self.stored_bottom, self.rect.bottom)):
                     if self.do['die']:
                         self.die()
                         self.velocity[0] = self.velocity[0]//2*-1
                         self.velocity[1] = constants.DEATH_PLATFORM_VELOCITY
                         platform.hit()
-                elif platform.type == 'disappear':
+                elif platform.type == 'disappear' and (platform.collidefall(self.stored_bottom, self.rect.bottom)):
                     if self.do['jump']:
                         self.velocity[1] = constants.PLAYER_JUMP_VELOCITY
                         move_recty = False
-                        if self.stored_y < platform.rect.top:
+                        if self.stored_bottom < platform.rect.top:
                             self.rect.bottom = platform.rect.top
                         platform.hit()
-                elif platform.type == 'moving':
+                elif platform.type == 'moving' and (platform.collidefall(self.stored_bottom, self.rect.bottom)):
                     if self.do['jump']:
                         self.velocity[1] = constants.PLAYER_JUMP_VELOCITY
                         move_recty = False
-                        if self.stored_y < platform.rect.top:
+                        if self.stored_bottom < platform.rect.top:
                             self.rect.bottom = platform.rect.top
                         platform.hit()
                         
@@ -178,7 +178,7 @@ class Player:
                     self.rect.centery = self.screen_height//2
                     self.platforms.movey(diff)
                     self.jump_on_floor = False
-                    self.menu.score += diff*constants.SCORE_PER_PIXEL
+                    self.menu.add_score(diff*constants.SCORE_PER_PIXEL)
                 else:
                     self.rect.y += self.velocity[1]
             else:

@@ -51,7 +51,7 @@ class PlatformGroup(SpriteGroup):
         self.no_platform_chance = constants.NO_PLATFORM_START_CHANCE
         self.moving_chance = constants.MOVING_PLATFORM_START_CHANCE
         self.score_counter = 0
-        self.score_store = self.menu.score
+        self.score_store = 0
         self.update()
 
     def movey(self, distance):
@@ -117,7 +117,7 @@ class PlatformGroup(SpriteGroup):
         self.no_platform_chance += constants.NO_PLATFORM_CHANCE_INCREASE
         self.disappear_chance += constants.DISAPPEAR_PLATFORM_CHANCE_INCREASE
         self.moving_chance += constants.MOVING_PLATFORM_CHANCE_INCREASE
-        if self.jump_boost_chance+self.death_chance+self.no_platform_chance > 100:
+        if self.jump_boost_chance+self.death_chance+self.no_platform_chance > 95:
             self.jump_boost_chance -= constants.JUMP_BOOST_PLATFORM_CHANCE_INCREASE
             self.death_chance -= constants.DEATH_PLATFORM_CHANCE_INCREASE
             self.no_platform_chance -= constants.NO_PLATFORM_CHANCE_INCREASE

@@ -126,7 +126,7 @@ class DisappearPlatform(Platform):
                 self.image.set_alpha(alpha)
             else:
                 self.groupkill = True
-        
+                
         y = self.rect.top+self.display_diff[1]
         speed_diff = self.target_velocity-self.velocity[1]
         self.acceleration[1] = speed_diff*constants.PLATFORM_ACCELERATION
