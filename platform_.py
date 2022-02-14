@@ -88,10 +88,13 @@ class DisappearPlatform(Platform):
 
     def __init__(self, screen, x, y):
         super().__init__(screen, x, y)
-        self.image.fill(constants.DISAPPEAR_PLATFORM_COLOR)
+        self.image = pygame.image.load('Images/disappear_platform.png')
+        self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
         self.image.set_alpha(constants.DISAPPEAR_PLATFORM_ALPHA)
+        self.rect = pygame.Rect(x, y, self.image.get_width(), self.image.get_height()-(100*constants.PLATFORM_SCALE))
         self.type = 'disappear'
         self.do_collision = True
+        self.target_velocity = 0
 
     def collidepoint(self, point):
         if self.do_collision:
@@ -112,6 +115,7 @@ class DisappearPlatform(Platform):
     def hit(self):
         super().hit()
         self.do_collision = False
+        self.target_velocity = constants.DISAPPEAR_PLATFORM_FALL_VELOCITY
 
     def update(self):
         if not self.do_collision:
@@ -120,4 +124,19 @@ class DisappearPlatform(Platform):
                 self.image.set_alpha(alpha)
             else:
                 self.groupkill = True
-        return super().update()
+        
+        y = self.rect.top+self.display_diff[1]
+        speed_diff = self.target_velocity-self.velocity[1]
+        self.acceleration[1] = speed_diff*constants.PLATFORM_ACCELERATION
+        if abs(self.velocity[1]) < 0.5:
+            self.velocity[1] = 0
+
+        self.velocity[0] += self.acceleration[0]
+        self.velocity[1] += self.acceleration[1]
+        self.display_diff[0] += self.velocity[0]
+        self.display_diff[1] += self.velocity[1]
+        
+        rect_to_display = self.rect.copy()
+        rect_to_display.x += self.display_diff[0]
+        rect_to_display.y += self.display_diff[1]
+        self.screen.blit(self.image, rect_to_display)

@@ -1,11 +1,12 @@
 import pygame
-from os import path
+import os
 import constants
 import player
 import group
 import menu
 import save_managing
 
+os.chdir(os.path.dirname(__file__))
 pygame.init()
 
 SCREEN_DIMENSIONS = WIDTH, HEIGHT = constants.SCREEN_SIZE
@@ -17,7 +18,7 @@ clock = pygame.time.Clock()
 default_data = {
     'highscore': 0
 }
-save_file = save_managing.SaveFile(path.join(path.dirname(__file__), 'save'), default_data)
+save_file = save_managing.SaveFile(os.path.join(os.path.dirname(__file__), 'save'), default_data)
 
 my_menu = menu.Menu(screen, save_file)
 platforms = group.PlatformGroup(screen, my_menu)
