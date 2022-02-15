@@ -14,6 +14,9 @@ screen = pygame.display.set_mode(SCREEN_DIMENSIONS)
 FPS = 60
 clock = pygame.time.Clock()
 
+background_image = pygame.image.load('Images/background.png')
+background_image = pygame.transform.scale(background_image, (background_image.get_width()*constants.BG_SCALE, background_image.get_height()*constants.BG_SCALE)).convert()
+
 # save file
 default_data = {
     'highscore': 0
@@ -29,7 +32,7 @@ my_player.do['gravity'] = False
 
 running = True
 while running:  
-    screen.fill(constants.BG_COLOR)
+    screen.blit(background_image, (0, 0))
     
     menu_mode = my_menu.get_mode()
     if menu_mode == 'title':
