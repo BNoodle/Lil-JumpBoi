@@ -4,9 +4,10 @@ import random
 
 class Player:
 
-    def __init__(self, screen, menu, platforms, x, y):
+    def __init__(self, screen, menu, background, platforms, x, y):
         self.screen = screen
         self.menu = menu
+        self.background = background
         self.platforms = platforms
 
         self.image_jump = pygame.image.load('Images/player_jump.png')
@@ -177,6 +178,7 @@ class Player:
                     diff = self.screen_height//2-(self.rect.centery+self.velocity[1])+1
                     self.rect.centery = self.screen_height//2
                     self.platforms.movey(diff)
+                    self.background.movey(diff)
                     self.jump_on_floor = False
                     self.menu.add_score(diff*constants.SCORE_PER_PIXEL)
                 else:
