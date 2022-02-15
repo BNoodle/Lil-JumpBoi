@@ -29,6 +29,10 @@ class Menu:
         self.title_image = pygame.transform.smoothscale(self.title_image, (self.title_image.get_width()*constants.TITLE_SCALE, self.title_image.get_height()*constants.TITLE_SCALE)).convert_alpha()
         self.title_pos = (0, 0)
 
+        self.play_fade = pygame.image.load('Images/play.png')
+        self.play_fade = pygame.transform.smoothscale(self.play_fade, (self.play_fade.get_width()*constants.PLAY_SCALE, self.play_fade.get_height()*constants.PLAY_SCALE)).convert_alpha()
+        self.play_fade_pos = (0, 0)
+
     def add_score(self, num):
         self.score += num
 
@@ -58,6 +62,9 @@ class Menu:
     def show_game_over(self):
         self.screen.blit(self.game_over_image, self.game_over_pos)
 
+    def show_play_fade(self):
+        self.screen.blit(self.play_fade, self.play_fade_pos)
+
     def fade_out(self):
         if not self.fade_amount >= constants.MAX_FADE_AMOUNT:
             self.fade_amount += constants.FADE_SPEED
@@ -70,21 +77,28 @@ class Menu:
             self.fade_cover.set_alpha(self.fade_amount)
         self.screen.blit(self.fade_cover, (0, 0))
 
+    def fade_hold(self):
+        self.screen.blit(self.fade_cover, (0, 0))
+
     def update(self):
         if self.mode == 'title':
+            self.show_play_fade()
             self.fade_out()
             self.show_title()
         elif self.mode == 'play':
             self.fade_in()
             if self.score > self.highscore: self.highscore = int(self.score)
+            self.show_play_fade()
             self.show_score()
             self.show_highscore()
         elif self.mode == 'game over':
+            self.show_play_fade()
             self.fade_out()
             self.show_score()
             self.show_highscore()
             self.show_game_over()
             self.save_file.data['highscore'] = self.highscore
         elif self.mode == 'restart':
+            self.fade_hold()
             self.score = 0
             self.mode = 'play'
