@@ -48,8 +48,10 @@ while running:
             my_player.image = my_player.image_stand
         if mouse_pos[0] > constants.SCREEN_SIZE[0]//2:
             my_player.image = pygame.transform.flip(my_player.image, True, False)
+        platforms.movey(constants.TITLE_PLATFORM_MOVE)
+        my_background.movey(constants.TITLE_PLATFORM_MOVE)
+
         platforms.update()
-        platforms.movey(1)
         my_menu.update()
         my_player.update()
     elif menu_mode == 'play':
