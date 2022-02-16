@@ -1,4 +1,3 @@
-from cmath import rect
 import pygame
 import constants
 
@@ -8,6 +7,8 @@ class Platform:
         self.screen = screen
         self.image = pygame.image.load('Images/regular_platform.png', )
         self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
+        self.shadow_image = pygame.image.load('Images/regular_platform_shadow.png', )
+        self.shadow_image = pygame.transform.smoothscale(self.shadow_image, (self.shadow_image.get_width()*constants.PLATFORM_SCALE, self.shadow_image.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.topleft = x, y
         self.display_diff = [0, 0]
@@ -39,6 +40,10 @@ class Platform:
         rect_to_display = self.rect.copy()
         rect_to_display.x += self.display_diff[0]
         rect_to_display.y += self.display_diff[1]
+        shadow_rect = rect_to_display.copy()
+        shadow_rect.x += constants.PLATFORM_SHADOW_OFFSET[0]
+        shadow_rect.y += constants.PLATFORM_SHADOW_OFFSET[1]
+        self.screen.blit(self.shadow_image, shadow_rect)
         self.screen.blit(self.image, rect_to_display)
 
     def collidefall(self, a, b):
@@ -57,6 +62,8 @@ class JumpBoostPlatform(Platform):
         super().__init__(screen, x, y)
         self.image = pygame.image.load('Images/jump_boost_platform.png', )
         self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
+        self.shadow_image = pygame.image.load('Images/jump_boost_platform_shadow.png', )
+        self.shadow_image = pygame.transform.smoothscale(self.shadow_image, (self.shadow_image.get_width()*constants.PLATFORM_SCALE, self.shadow_image.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.topleft = x, y
         self.type = 'jump boost'
@@ -68,6 +75,8 @@ class DeathPlatform(Platform):
         super().__init__(screen, x, y)
         self.image = pygame.image.load('Images/death_platform.png')
         self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
+        self.shadow_image = pygame.image.load('Images/death_platform_shadow.png', )
+        self.shadow_image = pygame.transform.smoothscale(self.shadow_image, (self.shadow_image.get_width()*constants.PLATFORM_SCALE, self.shadow_image.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
         self.rect = pygame.Rect((x, y-constants.DEATH_PLATFORM_SPIKE_HEIGHT), (self.image.get_width(), constants.DEATH_PLATFORM_SPIKE_HEIGHT))
         self.type = 'death'
 
@@ -81,6 +90,8 @@ class NonePlatform(Platform):
         super().__init__(screen, x, y)
         self.image.set_colorkey((255, 255, 255))
         self.image.fill((255, 255, 255))
+        self.shadow_image.set_colorkey((255, 255, 255))
+        self.shadow_image.fill((255, 255, 255))
         self.type = None
 
 
@@ -90,6 +101,8 @@ class DisappearPlatform(Platform):
         super().__init__(screen, x, y)
         self.image = pygame.image.load('Images/disappear_platform.png')
         self.image = pygame.transform.smoothscale(self.image, (self.image.get_width()*constants.PLATFORM_SCALE, self.image.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
+        self.shadow_image = pygame.image.load('Images/disappear_platform_shadow.png', )
+        self.shadow_image = pygame.transform.smoothscale(self.shadow_image, (self.shadow_image.get_width()*constants.PLATFORM_SCALE, self.shadow_image.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
         self.image.set_alpha(constants.DISAPPEAR_PLATFORM_ALPHA)
         self.rect = pygame.Rect(x, y, self.image.get_width(), self.image.get_height()-(100*constants.PLATFORM_SCALE))
         self.type = 'disappear'
@@ -122,6 +135,7 @@ class DisappearPlatform(Platform):
             alpha = self.image.get_alpha()-constants.DISAPPEAR_PLATFORM_ALPHA_DECREASE
             if alpha >= 0:
                 self.image.set_alpha(alpha)
+                self.shadow_image.set_alpha(alpha)
             else:
                 self.groupkill = True
                 
@@ -139,6 +153,10 @@ class DisappearPlatform(Platform):
         rect_to_display = self.rect.copy()
         rect_to_display.x += self.display_diff[0]
         rect_to_display.y += self.display_diff[1]
+        shadow_rect = rect_to_display.copy()
+        shadow_rect.x += constants.PLATFORM_SHADOW_OFFSET[0]
+        shadow_rect.y += constants.PLATFORM_SHADOW_OFFSET[1]
+        self.screen.blit(self.shadow_image, shadow_rect)
         self.screen.blit(self.image, rect_to_display)
 
 
@@ -158,6 +176,8 @@ class MovingPlatform(Platform):
         self.image5 = pygame.transform.smoothscale(self.image5, (self.image5.get_width()*constants.PLATFORM_SCALE, self.image5.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
         self.image6 = pygame.image.load('Images/moving_platform6.png')
         self.image6 = pygame.transform.smoothscale(self.image6, (self.image6.get_width()*constants.PLATFORM_SCALE, self.image6.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
+        self.shadow_image = pygame.image.load('Images/moving_platform_shadow.png', )
+        self.shadow_image = pygame.transform.smoothscale(self.shadow_image, (self.shadow_image.get_width()*constants.PLATFORM_SCALE, self.shadow_image.get_height()*constants.PLATFORM_SCALE)).convert_alpha()
 
         self.image_list = [self.image1, self.image2, self.image3, self.image4, self.image5, self.image6, self.image5, self.image4, self.image3, self.image2]
         self.animation_length = len(self.image_list)-1
