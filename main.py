@@ -28,16 +28,26 @@ my_background = background.Background(screen)
 my_menu = menu.Menu(screen, save_file)
 platforms = group.PlatformGroup(screen, my_menu)
 my_player = player.Player(screen, my_menu, my_background, platforms, WIDTH//2-(0.5*constants.PLAYER_SIZE[0]), HEIGHT*0.75)
+my_player.image = my_player.image_stand
 my_player.do['move'] = False
 my_player.do['jump'] = False
 my_player.do['gravity'] = False
+my_player.do['animate'] = False
 
 running = True
 while running:  
     my_background.update()
     
     menu_mode = my_menu.get_mode()
+
     if menu_mode == 'title':
+        mouse_pos = pygame.mouse.get_pos()
+        if my_player.rect.collidepoint(mouse_pos) and pygame.mouse.get_pressed()[0]:
+            my_player.image = my_player.image_death
+        else:
+            my_player.image = my_player.image_stand
+        if mouse_pos[0] > constants.SCREEN_SIZE[0]//2:
+            my_player.image = pygame.transform.flip(my_player.image, True, False)
         platforms.update()
         platforms.movey(1)
         my_menu.update()
