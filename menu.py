@@ -11,7 +11,7 @@ class Menu:
 
         self.mode = 'title'
 
-        self.score_font = pygame.font.Font(None, constants.SCORE_SIZE)
+        self.score_font = pygame.font.Font('Fonts/Roboto.ttf', constants.SCORE_SIZE)
 
         self.score = 0
         self.highscore = self.save_file.data['highscore']
