@@ -11,7 +11,9 @@ os.chdir(os.path.dirname(__file__))
 pygame.init()
 
 SCREEN_DIMENSIONS = WIDTH, HEIGHT = constants.SCREEN_SIZE
-screen = pygame.display.set_mode(SCREEN_DIMENSIONS)
+REAL_SCREEN_DIMENSIONS = REAL_WIDTH, REAL_HEIGHT = (int(WIDTH*constants.RESIZE_SCREEN_SCALE), int(HEIGHT*constants.RESIZE_SCREEN_SCALE))
+window = pygame.display.set_mode(REAL_SCREEN_DIMENSIONS)
+screen = pygame.Surface(SCREEN_DIMENSIONS)
 FPS = 60
 clock = pygame.time.Clock()
 
@@ -77,5 +79,8 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             save_file.save()
+
+    screen_to_blit = pygame.transform.smoothscale(screen, REAL_SCREEN_DIMENSIONS)
+    window.blit(screen_to_blit, (0, 0))
     pygame.display.flip()
     clock.tick(FPS)
